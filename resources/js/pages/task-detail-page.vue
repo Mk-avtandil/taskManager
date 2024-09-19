@@ -6,10 +6,12 @@ import {computed, onMounted, ref} from "vue";
 
 const route = useRoute();
 const store = useStore();
-const task = ref({});
+
 const token = computed(() => store.getters.token);
 const user = computed(() => store.getters.user);
 const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+const task = ref({});
 
 onMounted(async () => {
     getTask();

@@ -7,13 +7,9 @@ import { useStore } from "vuex";
 const router = useRouter();
 const store = useStore();
 const isHowPass = ref(false);
+const errors = ref({});
 
 const data = ref({
-    email: '',
-    password: ''
-});
-
-const errors = ref({
     email: '',
     password: '',
 });
@@ -30,10 +26,8 @@ const login = async () => {
 
         router.push({name: 'home_url'});
     } catch (error) {
-        if (error.response?.data.errors) {
-            Object.keys(error.response.data.errors).forEach(key => {
-                errors.value[key] = error.response.data.errors[key][0];
-            });
+        if (error.response && error.response.data && error.response.data.errors) {
+            errors.value = error.response.data.errors;
         } else {
             console.error("Something went wrong", error);
         }
@@ -68,7 +62,9 @@ const login = async () => {
                 <div class="mb-3">
                     <label for="email" class="form-label">Email:</label>
                     <input v-model="data.email" class="form-control" type="email" id="email" required/>
-                    <span v-if="errors.email">{{errors.email}}</span>
+                </div>
+                <div v-if="errors.email" class="alert alert-danger my-1">
+                    {{ errors.email[0] }}
                 </div>
 
                 <label for="password" class="form-label">Password:</label><br>
@@ -80,7 +76,9 @@ const login = async () => {
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                         </svg>
                     </button>
-                    <span v-if="errors.password">{{errors.password}}</span>
+                </div>
+                <div v-if="errors.password" class="alert alert-danger my-1">
+                    {{ errors.password[0] }}
                 </div>
                 <button class="btn btn-primary" type="submit">Login</button>
             </form>

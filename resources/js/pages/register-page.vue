@@ -15,12 +15,7 @@ const registerData = ref({
     password_confirmation: ''
 });
 
-const errors = ref({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-});
+const errors = ref({});
 
 const register = async () => {
     try {
@@ -35,10 +30,8 @@ const register = async () => {
         store.dispatch('fetchUser');
         router.push({name: 'home_url'});
     } catch(error) {
-        if (error.response?.data.errors) {
-            Object.keys(error.response.data.errors).forEach(key => {
-                errors.value[key] = error.response.data.errors[key][0]
-            });
+        if (error.response && error.response.data && error.response.data.errors) {
+            errors.value = error.response.data.errors;
         } else {
             console.error("Something went wrong", error);
         }
@@ -73,13 +66,19 @@ const register = async () => {
                 <div class="mb-2">
                     <label for="name" class="form-label">Name:</label>
                     <input class="form-control" type="text" v-model="registerData.name" id="name" required/>
-                    <span v-if="errors.name">{{errors.name}}</span>
                 </div>
+                <div v-if="errors.name" class="alert alert-danger my-1">
+                    {{ errors.name[0] }}
+                </div>
+
                 <div class="mb-2">
                     <label for="email" class="form-label">Email:</label>
                     <input class="form-control" type="email" v-model="registerData.email" id="email" required/>
-                    <span v-if="errors.email">{{errors.email}}</span>
                 </div>
+                <div v-if="errors.email" class="alert alert-danger my-1">
+                    {{ errors.email[0] }}
+                </div>
+
                 <label for="password" class="form-label">Password:</label>
                 <div class="input-group mb-2">
                     <input v-model="registerData.password" :type="showPassword ? 'text' : 'password'" class="form-control" type="password" id="password" required/>
@@ -89,8 +88,11 @@ const register = async () => {
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                         </svg>
                     </button>
-                    <span v-if="errors.password">{{errors.password}}</span>
                 </div>
+                <div v-if="errors.password" class="alert alert-danger my-1">
+                    {{ errors.password[0] }}
+                </div>
+
                 <label for="passwordConfirm" class="form-label">Confirm password:</label>
                 <div class="input-group mb-3">
                     <input :type="showPassword2 ? 'text' : 'password'" class="form-control" type="password" v-model="registerData.password_confirmation" id="passwordConfirm" required/>
@@ -100,7 +102,9 @@ const register = async () => {
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                         </svg>
                     </button>
-                    <span v-if="errors.password_confirmation">{{errors.password_confirmation}}</span>
+                </div>
+                <div v-if="errors.password_confirmation" class="alert alert-danger my-1">
+                    {{ errors.password_confirmation[0] }}
                 </div>
 
                 <button class="btn btn-primary" type="submit">Register</button>

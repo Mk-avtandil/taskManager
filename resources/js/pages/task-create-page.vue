@@ -64,14 +64,13 @@ const saveTask = async () => {
                 status: 'new',
                 user_id: user.value ? user.value.id : ''
             };
-
             createTask();
         }, 1000);
     } catch (error) {
         if (error.response && error.response.data && error.response.data.errors) {
             errors.value = error.response.data.errors;
         } else {
-            console.log('Failed to create task');
+            console.error('Failed to create task');
         }
     }
 };

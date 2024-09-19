@@ -90,7 +90,7 @@ const logout = async () => {
                 <router-link :to="{name: 'home_url'}" class="nav-link px-2 link-secondary">HOME</router-link>
             </li>
             <li>
-                <router-link :to="{name: 'create_task_url'}"  class="nav-link px-2">NEW TASK</router-link>
+                <router-link v-if="isAuthenticated" :to="{name: 'create_task_url'}"  class="nav-link px-2">NEW TASK</router-link>
             </li>
         </ul>
 
@@ -104,7 +104,7 @@ const logout = async () => {
         </div>
     </header>
 
-    <div class="container">
+    <div class="container" v-if="isAuthenticated">
         <div class="row">
             <div class="col-3">
                 <h1 class="text-success my-3">MY TASKS</h1>
@@ -162,6 +162,9 @@ const logout = async () => {
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container" v-if="!isAuthenticated">
+        <h1>Please log in to access the site features</h1>
     </div>
 </template>
 
